@@ -9,12 +9,9 @@ class Home extends Component{
         }
     }
 
-    componentDidMount(){
-
-    }
-
+    
     confirmCreds = () => {
-        this.props.navigation.navigate('Notifications');
+        this.props.navigation.navigate('Menu');
     }
 
     render(){

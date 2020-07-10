@@ -1,61 +1,107 @@
 import React, {Component} from 'react';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { createStackNavigator } from '@react-navigation/stack';
-import {View, Text, Button} from 'react-native';
-import { Appbar } from 'react-native-paper';
 import Home from './HomeComponent';
 import Setting from './SettingComponent';
-import Chat from './ChatComponent';
+import Menu from './MenuComponent';
 import {AppBarHeader, ChatBarHeader} from './HeaderComponent'
+import Chat from './ChatComponent';
 
-
-const ChatStack = createStackNavigator();
-const ChatStackScreen = () => {
+const SettingStack = createStackNavigator();
+const SettingStackScreen = () => {
     return(
-        <ChatStack.Navigator
-            initialRouteName = 'Chat'
+        <SettingStack.Navigator
             headerMode = 'screen'
         >
-            <ChatStack.Screen 
-                name = 'Chat'
-                component = {Chat}
-                options = {
-                    ({navigation}) => ({
-                        header : AppBarHeader
-                    })
-                }
-            />
-            <ChatStack.Screen
+            <SettingStack.Screen
                 name = 'Setting'
                 component = {Setting}
                 options = {
                     ({navigation}) => ({
-                        header : ChatBarHeader,
+                        header : () => <AppBarHeader title = 'Setting'/>
                     })
                 }
             />
-        </ChatStack.Navigator>
+
+        </SettingStack.Navigator>
     );
-} 
+}
+
+const MenuStack = createStackNavigator();
+const MenuStackScreen = () => {
+    return(
+        <MenuStack.Navigator
+            initialRouteName = 'Menu'
+            headerMode = 'screen'
+            screenOptions = {{
+                header : () => <AppBarHeader title = 'Menu'/>
+                }}
+        >
+            {/* pick a room */}
+            <MenuStack.Screen 
+                name = 'Menu'
+                component = {Menu}
+                // options = {
+                //     ({navigation}) => ({
+                //         header : () => <AppBarHeader title = 'Menus'/>
+                //     })
+                // }
+            />
+
+            {/* Menu */}
+            <MenuStack.Screen
+                name = 'Chat'
+                component = {Chat}
+                options = {
+                    ({navigation}) => ({
+                        header : ({navigation}) => <ChatBarHeader navigation = {navigation} title = 'Harsh'/>
+                    })
+                }
+            />
+        </MenuStack.Navigator>
+    );
+}
+
+const HomeStack = createStackNavigator();
+const HomeStackScreen = () => {
+    return(
+        <HomeStack.Navigator
+            headerMode = 'screen'
+            screenOptions = {{
+            header : () => <AppBarHeader title = 'Home'/>
+            }}
+        >
+            <HomeStack.Screen
+                name = 'Home'
+                component = {Home}
+                options = {
+                    ({navigation}) => ({
+                        
+                    })
+                }
+            />
+        </HomeStack.Navigator>
+    )
+}
 
 const MainDrawer = createDrawerNavigator();
 const Drawer = () => {
     return(
         <MainDrawer.Navigator
-            initialRouteName="Chat"
+            initialRouteName="Menu"
         >
             <MainDrawer.Screen
                 name = 'Home'
-                component = {Home}
-
+                component = {HomeStackScreen}
             />
             <MainDrawer.Screen
-                name = 'Chat'
-                component = {ChatStackScreen}
+                name = 'Menu'
+                component = {MenuStackScreen}
             />
             <MainDrawer.Screen
                 name = 'Setting'
-                component = {Setting}
+
+                component = {SettingStackScreen}
             />
         </MainDrawer.Navigator>
     );

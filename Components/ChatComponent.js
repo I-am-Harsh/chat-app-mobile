@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { View, Text } from 'react-native';
-import { Button } from 'react-native-paper';
+// import { Button } from 'react-native-paper';
 
 class Chat extends Component {
     constructor(props){
@@ -13,17 +13,13 @@ class Chat extends Component {
 
     render(){
         return(
-            <View style = {{margin : 50}}>
+            <View>
                 <Text>
-                    This is chat
+                    This is Chat
                 </Text>
-                <Button onPress = {() =>this.props.navigation.navigate('Setting')}>
-                    Setting
-                </Button>
             </View>
         );
     }
-
 }
 
 export default Chat;
