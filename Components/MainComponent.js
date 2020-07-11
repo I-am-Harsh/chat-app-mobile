@@ -1,11 +1,12 @@
 import React, {Component} from 'react';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { createStackNavigator } from '@react-navigation/stack';
-import Home from './HomeComponent';
-import Setting from './SettingComponent';
-import Menu from './MenuComponent';
 import {AppBarHeader, ChatBarHeader} from './HeaderComponent'
+import Home from './HomeComponent';
+import Setting, { ChangeName } from './SettingComponent';
+import Menu from './MenuComponent';
 import Chat from './ChatComponent';
+
 
 const SettingStack = createStackNavigator();
 const SettingStackScreen = () => {
@@ -18,7 +19,16 @@ const SettingStackScreen = () => {
                 component = {Setting}
                 options = {
                     ({navigation}) => ({
-                        header : () => <AppBarHeader title = 'Setting'/>
+                        header : () => <AppBarHeader title = 'Setting' navigation = {navigation}/>
+                    })
+                }
+            />
+            <SettingStack.Screen
+                name = 'Change Name'
+                component = {ChangeName}
+                options = {
+                    ({navigation}) => ({
+                        header : () => <ChatBarHeader title = 'Change Name' navigation = {navigation} disableOption = {true}/>
                     })
                 }
             />
@@ -34,8 +44,8 @@ const MenuStackScreen = () => {
             initialRouteName = 'Menu'
             headerMode = 'screen'
             screenOptions = {{
-                header : () => <AppBarHeader title = 'Menu'/>
-                }}
+                header : ({navigation}) => <AppBarHeader title = 'Menu' navigation = {navigation}/>
+            }}
         >
             {/* pick a room */}
             <MenuStack.Screen 
@@ -53,8 +63,10 @@ const MenuStackScreen = () => {
                 name = 'Chat'
                 component = {Chat}
                 options = {
-                    ({navigation}) => ({
-                        header : ({navigation}) => <ChatBarHeader navigation = {navigation} title = 'Harsh'/>
+                    () => ({
+                        header : ({navigation}) => (
+                            <ChatBarHeader navigation = {navigation} title = 'Harsh'/>
+                        )
                     })
                 }
             />
@@ -68,17 +80,12 @@ const HomeStackScreen = () => {
         <HomeStack.Navigator
             headerMode = 'screen'
             screenOptions = {{
-            header : () => <AppBarHeader title = 'Home'/>
+            header : ({navigation}) => <AppBarHeader title = 'Home' navigation = {navigation} />
             }}
         >
             <HomeStack.Screen
                 name = 'Home'
                 component = {Home}
-                options = {
-                    ({navigation}) => ({
-                        
-                    })
-                }
             />
         </HomeStack.Navigator>
     )
@@ -88,7 +95,7 @@ const MainDrawer = createDrawerNavigator();
 const Drawer = () => {
     return(
         <MainDrawer.Navigator
-            initialRouteName="Menu"
+            initialRouteName="Setting"
         >
             <MainDrawer.Screen
                 name = 'Home'
