@@ -8,6 +8,10 @@ setting --
     name change
     recents option -- delete room after application close ?
     dark mode?
-    
+
+home - room name + password --> check server --> success --> store localStorage('name')
+
+menu - componentDidMount() --> getItem form localStorage --> store in state --> iterate to form chat using ListItem --> onPress = navigate.(roomName)
+
 
     

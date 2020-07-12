@@ -1,11 +1,17 @@
 import React, {Component} from 'react';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { createStackNavigator } from '@react-navigation/stack';
+import AsyncStorage from '@react-native-community/async-storage';
 import {AppBarHeader, ChatBarHeader} from './HeaderComponent'
-import Home from './HomeComponent';
+import Login from './LoginComponent';
 import Setting, { ChangeName } from './SettingComponent';
 import Menu from './MenuComponent';
 import Chat from './ChatComponent';
+import chalk from 'chalk';
+
+const ctx = new chalk.Instance({level : 3});
+
+var rooms = [];
 
 
 const SettingStack = createStackNavigator();
@@ -37,28 +43,47 @@ const SettingStackScreen = () => {
     );
 }
 
+
+
 const MenuStack = createStackNavigator();
-const MenuStackScreen = () => {
+const MenuStackScreen = (props) => {
+    console.log(ctx.blueBright('Menu Screen props : ', props));
     return(
         <MenuStack.Navigator
             initialRouteName = 'Menu'
             headerMode = 'screen'
             screenOptions = {{
-                header : ({navigation}) => <AppBarHeader title = 'Menu' navigation = {navigation}/>
+                header : ({navigation}) => <AppBarHeader title = 'Chats' navigation = {navigation}/>
             }}
         >
             {/* pick a room */}
             <MenuStack.Screen 
                 name = 'Menu'
                 component = {Menu}
-                // options = {
-                //     ({navigation}) => ({
-                //         header : () => <AppBarHeader title = 'Menus'/>
-                //     })
-                // }
             />
 
-            {/* Menu */}
+            
+            {
+                props.rooms.length > 0 ? 
+                props.rooms.map((item,index) => {
+                    return(
+                        <MenuStack.Screen
+                            name = {item.toString()}
+                            key = {index}
+                            component = {Chat}
+                            options = {
+                                () => ({
+                                    header : ({navigation}) => (
+                                        <ChatBarHeader navigation = {navigation} title = {item}/>
+                                    )
+                                })
+                            }
+                        />
+                    )
+                })
+                :
+                console.log('gg')
+            }
             <MenuStack.Screen
                 name = 'Chat'
                 component = {Chat}
@@ -80,30 +105,32 @@ const HomeStackScreen = () => {
         <HomeStack.Navigator
             headerMode = 'screen'
             screenOptions = {{
-            header : ({navigation}) => <AppBarHeader title = 'Home' navigation = {navigation} />
+            header : ({navigation}) => <AppBarHeader title = 'Join a Room' navigation = {navigation} disableOption = {true} />
             }}
         >
             <HomeStack.Screen
-                name = 'Home'
-                component = {Home}
+                name = 'Join a Room'
+                component = {Login}
             />
         </HomeStack.Navigator>
     )
 }
 
 const MainDrawer = createDrawerNavigator();
-const Drawer = () => {
+const Drawer = (props) => {
+    console.log('Drawer : ', props.rooms);
+    const MenuScreen = (props) => <MenuStackScreen rooms = {props.rooms}/>
     return(
         <MainDrawer.Navigator
-            initialRouteName="Setting"
+            initialRouteName="Join a Room"
         >
             <MainDrawer.Screen
-                name = 'Home'
+                name = 'Join a Room'
                 component = {HomeStackScreen}
             />
             <MainDrawer.Screen
                 name = 'Menu'
-                component = {MenuStackScreen}
+                component = {MenuScreen}
             />
             <MainDrawer.Screen
                 name = 'Setting'
@@ -117,11 +144,25 @@ const Drawer = () => {
 class Main extends Component{
     constructor(props){
         super(props);
+        this.state = {
+            rooms : []
+        }
+    }
+
+    async componentDidMount(){
+        console.log('Main Component');
+        await AsyncStorage.getItem('rooms')
+        .then(result => {
+            this.setState({
+                rooms : JSON.parse(result)
+            })
+        })
+        // console.log(this.state.rooms);
     }
 
     render(){
         return(
-            <Drawer/>
+            <Drawer rooms = {this.state.rooms}/>
         );
     }
 

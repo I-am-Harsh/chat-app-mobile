@@ -10,12 +10,16 @@ export const AppBarHeader = (props) => {
     var disableOption = Boolean;
     
     title = props.title;
+    var disableOption = false;
+    if(props.disableOption){
+        disableOption = true
+    }
 
     return(
         <Appbar.Header>
             <Appbar.Action icon = 'menu' onPress = {() => props.navigation.toggleDrawer()} />
             <Appbar.Content title = {title}/>
-            <Appbar.Action icon={MORE_ICON} onPress={() => {}} />
+            { disableOption ? null : <Appbar.Action icon={MORE_ICON} onPress={() => {}} />}
         </Appbar.Header>
     );
 }
