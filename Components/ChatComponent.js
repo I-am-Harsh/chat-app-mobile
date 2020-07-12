@@ -49,7 +49,7 @@ class Chat extends Component {
 
 const Styles = StyleSheet.create({
     main : {
-        marginTop : 50,
+        margin : 20,
         flex : 1
     }
 })

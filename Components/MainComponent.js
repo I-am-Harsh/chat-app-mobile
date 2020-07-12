@@ -11,11 +11,32 @@ import chalk from 'chalk';
 
 const ctx = new chalk.Instance({level : 3});
 
-var rooms = [];
-
-
+const HomeStack = createStackNavigator();
 const SettingStack = createStackNavigator();
-const SettingStackScreen = () => {
+const MenuStack = createStackNavigator();
+
+class Main extends Component{
+    constructor(props){
+        super(props);
+        this.state = {
+            rooms : []
+        }
+    }
+
+
+    async componentDidMount(){
+        await AsyncStorage.getItem('rooms')
+        .then(result => {
+            this.setState({
+                rooms : JSON.parse(result)
+            })
+        })
+        // console.log(this.state.rooms);
+    }
+
+
+
+SettingStackScreen = () => {
     return(
         <SettingStack.Navigator
             headerMode = 'screen'
@@ -45,9 +66,8 @@ const SettingStackScreen = () => {
 
 
 
-const MenuStack = createStackNavigator();
-const MenuStackScreen = (props) => {
-    console.log(ctx.blueBright('Menu Screen props : ', props));
+
+MenuStackScreen = () => {
     return(
         <MenuStack.Navigator
             initialRouteName = 'Menu'
@@ -64,8 +84,8 @@ const MenuStackScreen = (props) => {
 
             
             {
-                props.rooms.length > 0 ? 
-                props.rooms.map((item,index) => {
+                this.state.rooms != null &&
+                this.state.rooms.map((item,index) => {
                     return(
                         <MenuStack.Screen
                             name = {item.toString()}
@@ -81,8 +101,6 @@ const MenuStackScreen = (props) => {
                         />
                     )
                 })
-                :
-                console.log('gg')
             }
             <MenuStack.Screen
                 name = 'Chat'
@@ -99,8 +117,21 @@ const MenuStackScreen = (props) => {
     );
 }
 
-const HomeStack = createStackNavigator();
-const HomeStackScreen = () => {
+
+HomeStackScreen = () => {
+    const LoginWithFunction = (props) => {
+
+        const updateRoom = (rooms) => {
+            this.setState({
+                rooms : rooms
+            })
+            // console.log(ctx.greenBright('Room Update called : ', this.state.rooms));
+        }
+
+        return(
+            <Login rooms = {this.state.rooms} updateRoom = {updateRoom} {...props}/>
+        )
+    }
     return(
         <HomeStack.Navigator
             headerMode = 'screen'
@@ -110,59 +141,40 @@ const HomeStackScreen = () => {
         >
             <HomeStack.Screen
                 name = 'Join a Room'
-                component = {Login}
+                component = {LoginWithFunction}
             />
         </HomeStack.Navigator>
     )
 }
 
-const MainDrawer = createDrawerNavigator();
-const Drawer = (props) => {
-    console.log('Drawer : ', props.rooms);
-    const MenuScreen = (props) => <MenuStackScreen rooms = {props.rooms}/>
+
+    render(){
+
+    const MainDrawer = createDrawerNavigator();
+    const Drawer = () => {
     return(
         <MainDrawer.Navigator
-            initialRouteName="Join a Room"
+            initialRouteName="Menu"
         >
             <MainDrawer.Screen
                 name = 'Join a Room'
-                component = {HomeStackScreen}
+                component = {this.HomeStackScreen}
             />
             <MainDrawer.Screen
                 name = 'Menu'
-                component = {MenuScreen}
+                component = {this.MenuStackScreen}
             />
             <MainDrawer.Screen
                 name = 'Setting'
 
-                component = {SettingStackScreen}
+                component = {this.SettingStackScreen}
             />
         </MainDrawer.Navigator>
     );
 }
 
-class Main extends Component{
-    constructor(props){
-        super(props);
-        this.state = {
-            rooms : []
-        }
-    }
-
-    async componentDidMount(){
-        console.log('Main Component');
-        await AsyncStorage.getItem('rooms')
-        .then(result => {
-            this.setState({
-                rooms : JSON.parse(result)
-            })
-        })
-        // console.log(this.state.rooms);
-    }
-
-    render(){
         return(
-            <Drawer rooms = {this.state.rooms}/>
+            <Drawer/>
         );
     }
 

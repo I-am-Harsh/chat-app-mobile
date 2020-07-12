@@ -14,7 +14,7 @@ class Login extends Component{
         this.state = {
             name : '',
             password : '',
-            first : false
+            first : true
         }
     }
     rooms = [];
@@ -31,7 +31,7 @@ class Login extends Component{
             }
         })
         // console.log(ctx.blue(this.state.first))
-        // console.log(ctx.red("Rooms : " ,this.rooms))
+        // console.log(ctx.red("Rooms in Login: " ,this.rooms))
     }
 
     reset = () => {
@@ -44,6 +44,7 @@ class Login extends Component{
         this.rooms.push(this.state.name);
         const roomArray = JSON.stringify(this.rooms)
         AsyncStorage.setItem('rooms' ,roomArray);
+        this.props.updateRoom(this.rooms);
         this.props.navigation.navigate('Menu');
     }
     
@@ -66,7 +67,6 @@ class Login extends Component{
             }
         }
         else{
-            log('Added room first');
             this.addRoom();
         }
     }
