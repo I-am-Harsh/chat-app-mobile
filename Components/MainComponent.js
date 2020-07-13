@@ -19,19 +19,20 @@ class Main extends Component{
     constructor(props){
         super(props);
         this.state = {
-            rooms : []
+            rooms : [],
+            screenName : false
         }
     }
 
 
     async componentDidMount(){
+
         await AsyncStorage.getItem('rooms')
         .then(result => {
             this.setState({
                 rooms : JSON.parse(result)
             })
         })
-        // console.log(this.state.rooms);
     }
 
 
@@ -127,7 +128,7 @@ HomeStackScreen = () => {
             })
             // console.log(ctx.greenBright('Room Update called : ', this.state.rooms));
         }
-
+        
         return(
             <Login rooms = {this.state.rooms} updateRoom = {updateRoom} {...props}/>
         )
