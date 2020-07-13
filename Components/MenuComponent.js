@@ -38,6 +38,13 @@ class Menu extends Component {
             AsyncStorage.setItem('rooms',JSON.stringify(newRoom));
         })
     }
+
+    deleteAllRooms = () => {
+        AsyncStorage.removeItem('rooms');
+        this.setState({
+            rooms : []
+        })
+    }
     
 
     render(){
@@ -103,7 +110,6 @@ class Menu extends Component {
             );
         }
     }
-
 }
 
 const Styles = StyleSheet.create({
