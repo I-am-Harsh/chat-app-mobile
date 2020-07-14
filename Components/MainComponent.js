@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import {Alert} from 'react-native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { createStackNavigator } from '@react-navigation/stack';
 import AsyncStorage from '@react-native-community/async-storage';
@@ -26,7 +27,7 @@ class Main extends Component {
 
 
     async componentDidMount() {
-
+        // AsyncStorage.removeItem('rooms');
         await AsyncStorage.getItem('rooms')
             .then(result => {
                 this.setState({
@@ -81,6 +82,7 @@ class Main extends Component {
                 <MenuStack.Screen
                     name='Menu'
                     component={Menu}
+                    initialParams = {{test : 'rip'}}
                 />
 
 
@@ -149,10 +151,29 @@ class Main extends Component {
     }
 
     deleteAllRooms = () => {
-        AsyncStorage.removeItem('rooms');
-        this.setState({
-            rooms : []
-        })
+        Alert.alert(
+            'Delete Room?',
+            'Are you sure you wish to delete the room?',
+            [
+                { 
+                    text: 'Cancel', 
+                    onPress: () => console.log('Not Deleted'),
+                    style: ' cancel'
+                },
+                {
+                    text: 'OK',
+                    onPress: () => {
+                        AsyncStorage.removeItem('rooms')
+                        this.setState({
+                            rooms : []
+                        })
+                    }
+                    
+                }
+            ],
+            { cancelable: true }
+        );
+        
         console.log('deleted');
     }
 
@@ -163,7 +184,7 @@ class Main extends Component {
         const Drawer = () => {
             return (
                 <MainDrawer.Navigator
-                    initialRouteName="Menu"
+                    initialRouteName="Join a Room"
                 >
                     <MainDrawer.Screen
                         name='Join a Room'

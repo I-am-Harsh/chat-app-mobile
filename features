@@ -1,17 +1,23 @@
-recents -- option to store
 
-layout -- 
 
-Create or join room
-Chat
+add - SnackBar instead of toast for delete and shit
+confirm alert for delete
+styling improve for AppBarHeader
+
 setting --
-    name change
+    name change -- done
     recents option -- delete room after application close ?
     dark mode?
 
-home - room name + password --> check server --> success --> store localStorage('name')
 
-menu - componentDidMount() --> getItem form localStorage --> store in state --> iterate to form chat using ListItem --> onPress = navigate.(roomName)
+    ongoing --- fix vertical dot -- snackbar -- pass params --
+
+bug -- room persists after deleting
+    -- popup menu is not clickable android -- works fine on IOS
+
+
+
+
 
 
     

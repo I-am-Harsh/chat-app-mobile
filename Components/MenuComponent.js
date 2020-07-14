@@ -1,25 +1,38 @@
 import React, { Component } from 'react';
-import { View, StyleSheet, Text, ScrollView, Alert } from "react-native";
+import { View, StyleSheet, Text, Alert } from "react-native";
 import { Button } from 'react-native-paper';
 import AsyncStorage from '@react-native-community/async-storage';
 import { ListItem } from 'react-native-elements';
 import Swipeout from 'react-native-swipeout';
-import { FlatList } from 'react-native-gesture-handler';
+import { FlatList, ScrollView } from 'react-native-gesture-handler';
+import { connect } from 'react-redux';
 
+
+const mapStateToProps = state => {
+    return {
+      rooms : state.rooms
+    }
+  }
 
 class Menu extends Component {
     constructor(props){
         super(props);
-
         this.state = {
-            rooms : []
+            rooms : [],
+            visible : false
         }
     }
 
     async componentDidMount(){
+        
+        // test redux
+        console.log(this.props.rooms)
+
+
         await AsyncStorage.getItem('rooms')
         .then(result => {
             if(result != null){
+                console.log(result);
                 this.setState({
                     rooms : JSON.parse(result) 
                 })
@@ -39,16 +52,7 @@ class Menu extends Component {
         })
     }
 
-    deleteAllRooms = () => {
-        AsyncStorage.removeItem('rooms');
-        this.setState({
-            rooms : []
-        })
-    }
-    
-
     render(){
-
         const renderChatItem = ({item, index}) => {
             const rightButton = [
                 {
@@ -56,7 +60,7 @@ class Menu extends Component {
                     type: 'delete',
                     onPress: () => {
                         Alert.alert(
-                            'Delete Favorite?',
+                            'Delete Room?',
                             'Are you sure you wish to delete the room?',
                             [
                                 { 
@@ -76,7 +80,7 @@ class Menu extends Component {
                 }
             ]
             return(
-                <ScrollView style = {Styles.main}>    
+                
                     <Swipeout right = { rightButton } autoClose key = {index}>
                         <ListItem 
                             title = {item}
@@ -88,14 +92,27 @@ class Menu extends Component {
                             containerStyle = {{padding : 30}}
                         />
                     </Swipeout>
-                </ScrollView>
+                
             )
         }
 
         if(this.state.rooms.length > 0){
             return(
-                <FlatList data = {this.state.rooms} renderItem = {renderChatItem} keyExtractor = {item => item}/>
+                <ScrollView style = {Styles.main}>
+                    <FlatList data = {this.state.rooms} renderItem = {renderChatItem} keyExtractor = {item => item}/>
+                    </ScrollView>
             );
+            // <Snackbar
+            //     visible={visible}
+            //     onDismiss={onDismissSnackBar}
+            //     action={{
+            //     label: 'Undo',
+            //     onPress: () => {
+            //         // Do something
+            //     },
+            //     }}>
+            //     Hey there! I'm a Snackbar.
+            // </Snackbar>
         }
         else{
             return(
@@ -106,6 +123,17 @@ class Menu extends Component {
                     <Button style ={Styles.button} mode='contained' onPress = {() => this.props.navigation.navigate('Join a Room')} >
                         Add Rooms
                     </Button>
+                    {/* <Snackbar
+                        visible={visible}
+                        onDismiss={onDismissSnackBar}
+                        action={{
+                        label: 'Undo',
+                        onPress: () => {
+                            // Do something
+                        },
+                        }}>
+                        Hey there! I'm a Snackbar.
+                    </Snackbar> */}
                 </View>
             );
         }
@@ -135,4 +163,4 @@ const Styles = StyleSheet.create({
     }
 })
 
-export default Menu;
+export default connect(mapStateToProps)(Menu);
