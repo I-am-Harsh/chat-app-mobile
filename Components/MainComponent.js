@@ -184,7 +184,7 @@ class Main extends Component {
         const Drawer = () => {
             return (
                 <MainDrawer.Navigator
-                    initialRouteName="Join a Room"
+                    initialRouteName="Menu"
                 >
                     <MainDrawer.Screen
                         name='Join a Room'

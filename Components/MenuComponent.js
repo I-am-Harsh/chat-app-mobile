@@ -6,13 +6,19 @@ import { ListItem } from 'react-native-elements';
 import Swipeout from 'react-native-swipeout';
 import { FlatList, ScrollView } from 'react-native-gesture-handler';
 import { connect } from 'react-redux';
+import { addRoom } from '../redux/ActionCreators';
+
 
 
 const mapStateToProps = state => {
     return {
       rooms : state.rooms
     }
-  }
+}
+
+const mapDispatchToProps = (dispatch) => ({
+    addRoom : (name) => dispatch(addRoom(name))
+})
 
 class Menu extends Component {
     constructor(props){
@@ -26,8 +32,8 @@ class Menu extends Component {
     async componentDidMount(){
         
         // test redux
-        console.log(this.props.rooms)
-
+        console.log('Redux rooms : ',this.props.rooms)
+        addRoom('test1');
 
         await AsyncStorage.getItem('rooms')
         .then(result => {
@@ -81,26 +87,27 @@ class Menu extends Component {
             ]
             return(
                 
-                    <Swipeout right = { rightButton } autoClose key = {index}>
+                    // <Swipeout right = { rightButton } autoClose key = {index}>
                         <ListItem 
                             title = {item}
                             bottomDivider
                             chevron
-                            onPress = {() => {this.props.navigation.navigate(item)}}
+                            // onPress = {() => {this.props.navigation.navigate(item)}}
+                            onPress = {() => addRoom('asd')}
                             titleStyle = {{fontSize : 20}}
                             badge = {{value : 3}}
                             containerStyle = {{padding : 30}}
                         />
-                    </Swipeout>
+                    // </Swipeout>
                 
             )
         }
 
         if(this.state.rooms.length > 0){
             return(
-                <ScrollView style = {Styles.main}>
+                // <ScrollView style = {Styles.main}>
                     <FlatList data = {this.state.rooms} renderItem = {renderChatItem} keyExtractor = {item => item}/>
-                    </ScrollView>
+                    // </ScrollView>
             );
             // <Snackbar
             //     visible={visible}
@@ -163,4 +170,4 @@ const Styles = StyleSheet.create({
     }
 })
 
-export default connect(mapStateToProps)(Menu);
+export default connect(mapStateToProps,mapDispatchToProps)(Menu);
