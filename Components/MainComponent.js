@@ -3,6 +3,7 @@ import {Alert} from 'react-native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { createStackNavigator } from '@react-navigation/stack';
 import AsyncStorage from '@react-native-community/async-storage';
+import { connect } from 'react-redux';
 import { AppBarHeader, ChatBarHeader } from './HeaderComponent'
 import Login from './LoginComponent';
 import Setting, { ChangeName } from './SettingComponent';
@@ -11,6 +12,13 @@ import Chat from './ChatComponent';
 import chalk from 'chalk';
 
 const ctx = new chalk.Instance({ level: 3 });
+
+const mapStateToProps = state => {
+    return {
+      rooms : state.rooms
+    }
+}
+
 
 const HomeStack = createStackNavigator();
 const SettingStack = createStackNavigator();
@@ -211,4 +219,4 @@ class Main extends Component {
 }
 
 
-export default Main;
+export default connect(mapStateToProps)(Main);

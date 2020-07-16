@@ -2,11 +2,21 @@ import React, {Component} from 'react';
 import {View, Text, StyleSheet, ToastAndroid, Platform, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import { Card, TextInput, Button, Snackbar } from 'react-native-paper';
 import AsyncStorage from '@react-native-community/async-storage';
+import { connect } from 'react-redux';
 import chalk from 'chalk';
 
 const ctx = new chalk.Instance({level : 3});
 const log = (text) => console.log(ctx.cyanBright(text));
 
+const mapStateToProps = state => {
+    return {
+      rooms : state.rooms
+    }
+}
+
+const mapDispatchToProps = (dispatch) => ({
+    addRoom : (name) => dispatch(addRoom(name))
+})
 
 class Login extends Component{
     constructor(props){
@@ -173,4 +183,4 @@ const Styles = StyleSheet.create({
         fontSize : 20
     }
 })
-export default Login;
+export default connect(mapStateToProps, mapDispatchToProps)(Login);

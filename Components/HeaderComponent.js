@@ -1,53 +1,63 @@
 import React, { useState } from 'react';
 import { Button, Menu, Divider, Provider, Appbar } from 'react-native-paper';
+import { connect } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux'
 
 
 const MORE_ICON = Platform.OS === 'ios' ? 'dots-horizontal' : 'dots-vertical';
-{/* <Appbar.Action icon={MORE_ICON} onPress={() => openMenu()} /> */}
+
+const mapStateToProps = state => {
+    return {
+      rooms : state.rooms
+    }
+}
+
+const mapDispatchToProps = (dispatch) => ({
+    addRoom : (name) => dispatch(addRoom(name))
+})
 
 
 export const AppBarHeader = (props) => {
+    
+    // params define
     var title = String;
     var disableOption = Boolean;
     
+    // check if params supplied
     title = props.title;
     var disableOption = false;
     if(props.disableOption){
         disableOption = true
     }
 
-    const [visible, setVisible] = React.useState(false);
+    // redux
+    const rooms = useSelector(state => state.rooms);
+    const dispatch = useDispatch();
+    console.log('App bar header : ', rooms);
+
+
+    // menu state
+    const [visible, setVisible] = useState(false);
     const openMenu = () => {
         setVisible(true);
     }
+
+    // close menu 
     const closeMenu = () => setVisible(false);
 
     return(
         <Appbar.Header>
             <Appbar.Action icon = 'menu' onPress = {() => props.navigation.toggleDrawer()} />
             <Appbar.Content title = {title}/>
-            { 
-                disableOption ? 
-                    null 
-                    : 
-                    // <Appbar.Action icon={MORE_ICON} onPress={() => openMenu()} />
-                    null
-                    
-                    
-            }
             <Provider>
                 <Menu
                     visible = {visible}
                     onDismiss = {closeMenu}
                     anchor = {
                         <Appbar.Action icon={MORE_ICON} onPress={() => openMenu()} style = {{alignSelf : 'flex-end'}} color = 'white' />
-                    }
-                    
+                    }   
                 >
-                    <Menu.Item onPress={() => {props.deleteAllRooms()}} title="Delete all Rooms" />
-                    <Menu.Item onPress={() => {}} title="Item 2" />
-                    <Divider />
-                    <Menu.Item onPress={() => {}} title="Item 3" />
+                    <Menu.Item onPress={() => dispatch({type : 'deleteAllRooms'})} title="Delete All Rooms"/>
                 </Menu>
             </Provider>
         </Appbar.Header>

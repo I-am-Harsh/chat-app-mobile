@@ -6,8 +6,7 @@ import { ListItem } from 'react-native-elements';
 import Swipeout from 'react-native-swipeout';
 import { FlatList, ScrollView } from 'react-native-gesture-handler';
 import { connect } from 'react-redux';
-import { addRoom } from '../redux/ActionCreators';
-
+import { addRoom, deleteAllRooms, deleteSingleRoom } from '../redux/ActionCreators';
 
 
 const mapStateToProps = state => {
@@ -17,7 +16,10 @@ const mapStateToProps = state => {
 }
 
 const mapDispatchToProps = (dispatch) => ({
-    addRoom : (name) => dispatch(addRoom(name))
+    addRoom : (name) => dispatch(addRoom(name)),
+    deleteAllRooms : () => dispatch(deleteAllRooms()),
+    // fix this variable send 
+    deleteSingleRoom : (index) => dispatch(deleteSingleRoom(index))
 })
 
 class Menu extends Component {
@@ -85,7 +87,7 @@ class Menu extends Component {
                                 },
                                 {
                                     text: 'OK',
-                                    onPress: (index) => this.deleteRoom(index)
+                                    onPress: (index) => this.props.deleteSingleRoom(index)
                                 }
                             ],
                             { cancelable: true }
@@ -101,8 +103,8 @@ class Menu extends Component {
                         title = {item}
                         bottomDivider
                         chevron
-                        // onPress = {() => {this.props.navigation.navigate(item)}}
-                        onPress = {() => this.props.addRoom(index)}
+                        onPress = {() => {this.props.navigation.navigate(item)}}
+                        // onPress = {() => this.props.deleteSingleRoom(0)}
                         titleStyle = {{fontSize : 20}}
                         badge = {{value : 3}}
                         containerStyle = {{padding : 30}}
@@ -118,17 +120,6 @@ class Menu extends Component {
                     <FlatList data = {this.state.rooms} renderItem = {renderChatItem} keyExtractor = {item => item}/>
                     // </ScrollView>
             );
-            // <Snackbar
-            //     visible={visible}
-            //     onDismiss={onDismissSnackBar}
-            //     action={{
-            //     label: 'Undo',
-            //     onPress: () => {
-            //         // Do something
-            //     },
-            //     }}>
-            //     Hey there! I'm a Snackbar.
-            // </Snackbar>
         }
         else{
             return(
@@ -139,17 +130,6 @@ class Menu extends Component {
                     <Button style ={Styles.button} mode='contained' onPress = {() => this.props.navigation.navigate('Join a Room')} >
                         Add Rooms
                     </Button>
-                    {/* <Snackbar
-                        visible={visible}
-                        onDismiss={onDismissSnackBar}
-                        action={{
-                        label: 'Undo',
-                        onPress: () => {
-                            // Do something
-                        },
-                        }}>
-                        Hey there! I'm a Snackbar.
-                    </Snackbar> */}
                 </View>
             );
         }
