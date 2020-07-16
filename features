@@ -16,6 +16,9 @@ bug -- room persists after deleting
     -- popup menu is not clickable android -- works fine on IOS
 
 
+to fix - virtualized/scroll view thing in room render
+add swipeout back in menu
+
 
 
 

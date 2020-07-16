@@ -33,17 +33,26 @@ class Menu extends Component {
         
         // test redux
         console.log('Redux rooms : ',this.props.rooms)
-        addRoom('test1');
+        
 
         await AsyncStorage.getItem('rooms')
         .then(result => {
             if(result != null){
-                console.log(result);
                 this.setState({
                     rooms : JSON.parse(result) 
                 })
             }
         })
+
+        // test = (state = [1,2]) => {
+        //     var roomName = 'test1';
+        //     var newRooms = [...state];
+        //     newRooms.unshift(roomName);
+        // }
+    }
+
+    componentDidUpdate(){
+        console.log('Did update : ', this.props.rooms);
     }
 
     deleteRoom = async (index) => {
@@ -87,19 +96,19 @@ class Menu extends Component {
             ]
             return(
                 
-                    // <Swipeout right = { rightButton } autoClose key = {index}>
-                        <ListItem 
-                            title = {item}
-                            bottomDivider
-                            chevron
-                            // onPress = {() => {this.props.navigation.navigate(item)}}
-                            onPress = {() => addRoom('asd')}
-                            titleStyle = {{fontSize : 20}}
-                            badge = {{value : 3}}
-                            containerStyle = {{padding : 30}}
-                        />
-                    // </Swipeout>
-                
+                // <Swipeout right = { rightButton } autoClose key = {index}>
+                    <ListItem 
+                        title = {item}
+                        bottomDivider
+                        chevron
+                        // onPress = {() => {this.props.navigation.navigate(item)}}
+                        onPress = {() => this.props.addRoom(index)}
+                        titleStyle = {{fontSize : 20}}
+                        badge = {{value : 3}}
+                        containerStyle = {{padding : 30}}
+                    />
+                // </Swipeout>
+            
             )
         }
 

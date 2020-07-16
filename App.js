@@ -3,17 +3,24 @@ import { NavigationContainer } from '@react-navigation/native';
 import Main from './Components/MainComponent';
 import { Provider } from 'react-redux';
 import { ConfigureStore } from './redux/configureStore';
+import { PersistGate } from 'redux-persist/es/integration/react'
 
 
 
-const store = ConfigureStore();
+const { persistor, store } = ConfigureStore();
+
 
 export default function App() {
   return (
     <Provider store = {store}>
-      <NavigationContainer>
-        <Main/>
-      </NavigationContainer>
+      <PersistGate 
+        persistor = {persistor}
+        loading={null}
+      >
+          <NavigationContainer>
+            <Main/>
+          </NavigationContainer>
+      </PersistGate>
     </Provider>
   );
 }
