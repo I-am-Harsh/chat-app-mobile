@@ -1,16 +1,14 @@
 
 
-add - SnackBar instead of toast for delete and shit
-confirm alert for delete
-styling improve for AppBarHeader
+
+confirm alert for delete -- check once
+
 
 setting --
     name change -- done
     recents option -- delete room after application close ?
     dark mode?
 
-
-    ongoing --- fix vertical dot -- snackbar -- pass params --
 
 bug -- room persists after deleting
     -- popup menu is not clickable android -- works fine on IOS

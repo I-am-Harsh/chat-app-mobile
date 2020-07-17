@@ -33,14 +33,6 @@ class Login extends Component{
             snackBarText : ''
         }
     }
-    // rooms = [];
-    async componentDidMount(){
-    
-        console.log(ctx.green('Rooms : ', this.props.rooms))
-        if(this.props.rooms.length == 0){
-            console.log(ctx.red('if'));
-        }
-    }
 
     reset = () => {
         this.setState({
@@ -79,19 +71,10 @@ class Login extends Component{
         else{
             if(this.props.rooms.length !== 0){
                 if(this.props.rooms.includes(this.state.name)){
-                    // replace with snackbar
-                    if(Platform.OS === 'android'){
-                        // code for room already joined snackbar
-                        this.toggleSnack('Room already joined');
-
-                        // ToastAndroid.show('Room Already Joined', ToastAndroid.SHORT);
-                        this.reset()
-                    }
+                    this.toggleSnack('Room already joined');
+                    this.reset()
                 }
                 else{
-                    // if(Platform.OS === 'android'){
-                    //     ToastAndroid.show('Room Joined', ToastAndroid.SHORT);
-                    // }
                     this.props.addRoom(this.state.name);
                     this.props.navigation.navigate('Menu');
                     this.props.snackbarToggle();
@@ -101,7 +84,6 @@ class Login extends Component{
                 this.props.addRoom(this.state.name);
                 this.props.navigation.navigate('Menu');
                 this.props.snackbarToggle();
-
             }
         }
     }

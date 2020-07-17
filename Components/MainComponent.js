@@ -27,25 +27,7 @@ const MenuStack = createStackNavigator();
 class Main extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-            rooms: [],
-            screenName: false
-        }
     }
-
-
-    // remove this
-    async componentDidMount() {
-        // AsyncStorage.removeItem('rooms');
-        await AsyncStorage.getItem('rooms')
-            .then(result => {
-                this.setState({
-                    rooms: JSON.parse(result)
-                })
-            })
-    }
-
-
 
     SettingStackScreen = () => {
         return (
@@ -81,7 +63,7 @@ class Main extends Component {
     MenuStackScreen = () => {
         return (
             <MenuStack.Navigator
-                initialRouteName='Menu'
+                initialRouteName='Chat Test'
                 headerMode='screen'
                 screenOptions={{
                     header: ({ navigation }) => <AppBarHeader title='Chats' navigation={navigation}/>
@@ -94,8 +76,8 @@ class Main extends Component {
                 />
 
                 {
-                    this.state.rooms != null &&
-                    this.state.rooms.map((item, index) => {
+                    this.props.rooms.length !== 0 &&
+                    this.props.rooms.map((item, index) => {
                         return (
                             <MenuStack.Screen
                                 name={item.toString()}
@@ -112,6 +94,18 @@ class Main extends Component {
                         )
                     })
                 }
+                <MenuStack.Screen
+                    name={'Chat Test'}
+                    key={100}
+                    component={Chat}
+                    options={
+                        () => ({
+                            header: ({ navigation }) => (
+                                <ChatBarHeader navigation={navigation} title={'Chat Test'} />
+                            )
+                        })
+                    }
+                />
             </MenuStack.Navigator>
         );
     }
@@ -139,7 +133,7 @@ class Main extends Component {
         const Drawer = () => {
             return (
                 <MainDrawer.Navigator
-                    initialRouteName="Join a Room"
+                    initialRouteName="Menu"
                 >
                     <MainDrawer.Screen
                         name='Join a Room'
