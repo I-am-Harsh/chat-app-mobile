@@ -33,7 +33,7 @@ export const AppBarHeader = (props) => {
     // redux
     const rooms = useSelector(state => state.rooms);
     const dispatch = useDispatch();
-    console.log('App bar header : ', rooms);
+    // console.log('App bar header : ', rooms);
 
 
     // menu state

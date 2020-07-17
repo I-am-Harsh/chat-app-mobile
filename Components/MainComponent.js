@@ -34,6 +34,7 @@ class Main extends Component {
     }
 
 
+    // remove this
     async componentDidMount() {
         // AsyncStorage.removeItem('rooms');
         await AsyncStorage.getItem('rooms')
@@ -83,16 +84,14 @@ class Main extends Component {
                 initialRouteName='Menu'
                 headerMode='screen'
                 screenOptions={{
-                    header: ({ navigation }) => <AppBarHeader title='Chats' navigation={navigation} deleteAllRooms = {this.deleteAllRooms} />
+                    header: ({ navigation }) => <AppBarHeader title='Chats' navigation={navigation}/>
                 }}
             >
                 {/* pick a room */}
                 <MenuStack.Screen
                     name='Menu'
                     component={Menu}
-                    initialParams = {{test : 'rip'}}
                 />
-
 
                 {
                     this.state.rooms != null &&
@@ -113,36 +112,12 @@ class Main extends Component {
                         )
                     })
                 }
-                <MenuStack.Screen
-                    name='Chat'
-                    component={Chat}
-                    options={
-                        () => ({
-                            header: ({ navigation }) => (
-                                <ChatBarHeader navigation={navigation} title='Harsh' />
-                            )
-                        })
-                    }
-                />
             </MenuStack.Navigator>
         );
     }
 
 
     HomeStackScreen = () => {
-        const LoginWithFunction = (props) => {
-
-            const updateRoom = (rooms) => {
-                this.setState({
-                    rooms: rooms
-                })
-                // console.log(ctx.greenBright('Room Update called : ', this.state.rooms));
-            }
-
-            return (
-                <Login rooms={this.state.rooms} updateRoom={updateRoom} {...props} />
-            )
-        }
         return (
             <HomeStack.Navigator
                 headerMode='screen'
@@ -152,39 +127,11 @@ class Main extends Component {
             >
                 <HomeStack.Screen
                     name='Join a Room'
-                    component={LoginWithFunction}
+                    component={Login}
                 />
             </HomeStack.Navigator>
         )
     }
-
-    deleteAllRooms = () => {
-        Alert.alert(
-            'Delete Room?',
-            'Are you sure you wish to delete the room?',
-            [
-                { 
-                    text: 'Cancel', 
-                    onPress: () => console.log('Not Deleted'),
-                    style: ' cancel'
-                },
-                {
-                    text: 'OK',
-                    onPress: () => {
-                        AsyncStorage.removeItem('rooms')
-                        this.setState({
-                            rooms : []
-                        })
-                    }
-                    
-                }
-            ],
-            { cancelable: true }
-        );
-        
-        console.log('deleted');
-    }
-
 
     render() {
 
@@ -192,7 +139,7 @@ class Main extends Component {
         const Drawer = () => {
             return (
                 <MainDrawer.Navigator
-                    initialRouteName="Menu"
+                    initialRouteName="Join a Room"
                 >
                     <MainDrawer.Screen
                         name='Join a Room'

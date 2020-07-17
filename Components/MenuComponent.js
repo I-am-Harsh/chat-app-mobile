@@ -1,17 +1,18 @@
 import React, { Component } from 'react';
 import { View, StyleSheet, Text, Alert } from "react-native";
-import { Button } from 'react-native-paper';
+import { Button, Snackbar } from 'react-native-paper';
 import AsyncStorage from '@react-native-community/async-storage';
 import { ListItem } from 'react-native-elements';
 import Swipeout from 'react-native-swipeout';
 import { FlatList, ScrollView } from 'react-native-gesture-handler';
 import { connect } from 'react-redux';
-import { addRoom, deleteAllRooms, deleteSingleRoom } from '../redux/ActionCreators';
+import { addRoom, deleteAllRooms, deleteSingleRoom, snackbarToggle } from '../redux/ActionCreators';
 
 
 const mapStateToProps = state => {
     return {
-      rooms : state.rooms
+      rooms : state.rooms,
+      snackbar : state.snackbar
     }
 }
 
@@ -19,7 +20,8 @@ const mapDispatchToProps = (dispatch) => ({
     addRoom : (name) => dispatch(addRoom(name)),
     deleteAllRooms : () => dispatch(deleteAllRooms()),
     // fix this variable send 
-    deleteSingleRoom : (index) => dispatch(deleteSingleRoom(index))
+    deleteSingleRoom : (index) => dispatch(deleteSingleRoom(index)),
+    snackbarToggle : (current) => dispatch(snackbarToggle(current))
 })
 
 class Menu extends Component {
@@ -32,42 +34,12 @@ class Menu extends Component {
     }
 
     async componentDidMount(){
-        
         // test redux
-        console.log('Redux rooms : ',this.props.rooms)
-        
-
-        await AsyncStorage.getItem('rooms')
-        .then(result => {
-            if(result != null){
-                this.setState({
-                    rooms : JSON.parse(result) 
-                })
-            }
-        })
-
-        // test = (state = [1,2]) => {
-        //     var roomName = 'test1';
-        //     var newRooms = [...state];
-        //     newRooms.unshift(roomName);
-        // }
+        // console.log('Redux rooms : ',this.props.rooms)
+        console.log('Snackbar update : ', this.props.snackbar)
     }
 
-    componentDidUpdate(){
-        console.log('Did update : ', this.props.rooms);
-    }
-
-    deleteRoom = async (index) => {
-        await AsyncStorage.getItem('rooms')
-        .then(result => {
-            var newRoom = JSON.parse(result);
-            newRoom.splice(index,1);
-            this.setState({
-                rooms : newRoom
-            })
-            AsyncStorage.setItem('rooms',JSON.stringify(newRoom));
-        })
-    }
+    
 
     render(){
         const renderChatItem = ({item, index}) => {
@@ -104,7 +76,7 @@ class Menu extends Component {
                         bottomDivider
                         chevron
                         onPress = {() => {this.props.navigation.navigate(item)}}
-                        // onPress = {() => this.props.deleteSingleRoom(0)}
+                        // onPress = {() => this.props.addRoom('1')}
                         titleStyle = {{fontSize : 20}}
                         badge = {{value : 3}}
                         containerStyle = {{padding : 30}}
@@ -114,10 +86,18 @@ class Menu extends Component {
             )
         }
 
-        if(this.state.rooms.length > 0){
+        if(this.props.rooms.length > 0){
             return(
                 // <ScrollView style = {Styles.main}>
-                    <FlatList data = {this.state.rooms} renderItem = {renderChatItem} keyExtractor = {item => item}/>
+                <View style = {{flex : 1}}>
+                    <FlatList data = {this.props.rooms} renderItem = {renderChatItem} keyExtractor = {item => item}/>
+                    <Snackbar
+                        visible = {this.props.snackbar}
+                        onDismiss={() => this.props.snackbarToggle()}
+                    >
+                        Room Joined
+                    </Snackbar>
+                    </View>
                     // </ScrollView>
             );
         }

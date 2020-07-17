@@ -4,6 +4,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 import thunk from 'redux-thunk';
 import logger from 'redux-logger';
 import { Rooms } from './Rooms';
+import { snackbar } from './Snackbar';
 
 
 const config = {
@@ -15,9 +16,10 @@ const config = {
 export const ConfigureStore = () => {
     const store = createStore(
         persistCombineReducers(config, {
-            rooms : Rooms
+            rooms : Rooms,
+            snackbar : snackbar
         }),
-        applyMiddleware(thunk)
+        applyMiddleware(thunk,logger)
     );
     const persistor = persistStore(store);
     return { persistor, store };

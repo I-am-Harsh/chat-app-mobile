@@ -19,3 +19,10 @@ export const deleteSingleRoom = (index) => ({
         index : index
     }
 })
+
+export const snackbarToggle = (current) => ({
+    type : ActionTypes.snackbar,
+    payload : {
+        current : current
+    }
+})

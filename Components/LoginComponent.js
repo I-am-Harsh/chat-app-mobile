@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 import {View, Text, StyleSheet, ToastAndroid, Platform, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import { Card, TextInput, Button, Snackbar } from 'react-native-paper';
-import AsyncStorage from '@react-native-community/async-storage';
 import { connect } from 'react-redux';
+import { addRoom, snackbarToggle } from '../redux/ActionCreators';
 import chalk from 'chalk';
 
 const ctx = new chalk.Instance({level : 3});
@@ -15,7 +15,8 @@ const mapStateToProps = state => {
 }
 
 const mapDispatchToProps = (dispatch) => ({
-    addRoom : (name) => dispatch(addRoom(name))
+    addRoom : (name) => dispatch(addRoom(name)),
+    snackbarToggle : () => dispatch(snackbarToggle())
 })
 
 class Login extends Component{
@@ -24,42 +25,28 @@ class Login extends Component{
         this.state = {
             name : '',
             password : '',
-            first : false,
             errorRoomName : false,
             errorPass : false,
-            snackbar : true,
+            snackbar : false,
             // when server return false
-            wrongPass : false
+            wrongPass : false,
+            snackBarText : ''
         }
     }
-    rooms = [];
+    // rooms = [];
     async componentDidMount(){
-        // await AsyncStorage.removeItem('rooms')
-
-        // get rooms array
-        await AsyncStorage.getItem('rooms')
-        .then(result => {
-            if(result != null){
-                this.rooms = JSON.parse(result)
-            }
-            else{
-                this.setState({first : true})
-            }
-        })
-        // console.log(ctx.red("Rooms in Login: " ,this.rooms))
+    
+        console.log(ctx.green('Rooms : ', this.props.rooms))
+        if(this.props.rooms.length == 0){
+            console.log(ctx.red('if'));
+        }
     }
 
     reset = () => {
         this.setState({
-            name : ''
+            name : '',
+            password : ''
         })
-    }
-
-    addRoom = async () => { 
-        this.rooms.push(this.state.name);
-        const roomArray = JSON.stringify(this.rooms)
-        await AsyncStorage.setItem('rooms' ,roomArray);
-        this.props.updateRoom(this.rooms);    
     }
 
     checkEmpty = () => {
@@ -81,38 +68,56 @@ class Login extends Component{
     
     confirmCreds = () => {
         // API call
+
+        // check if empty credentials
         if(this.checkEmpty()){
-            this.toggleSnack();
-            
+            // if empty
+            // show message 
+            this.toggleSnack('Please fill the red fields.');
+            log('empty true');
         }
         else{
-            if(!this.state.first){
-                if(this.rooms.includes(this.state.name)){
+            if(this.props.rooms.length !== 0){
+                if(this.props.rooms.includes(this.state.name)){
+                    // replace with snackbar
                     if(Platform.OS === 'android'){
-                        this.toggleSnack();
-                        ToastAndroid.show('Room Already Joined', ToastAndroid.SHORT);
+                        // code for room already joined snackbar
+                        this.toggleSnack('Room already joined');
+
+                        // ToastAndroid.show('Room Already Joined', ToastAndroid.SHORT);
                         this.reset()
                     }
                 }
                 else{
-                    if(true){
-                        if(Platform.OS === 'android'){
-                            ToastAndroid.show('Room Joined', ToastAndroid.SHORT);
-                        }
-                        this.addRoom();
-                    }
+                    // if(Platform.OS === 'android'){
+                    //     ToastAndroid.show('Room Joined', ToastAndroid.SHORT);
+                    // }
+                    this.props.addRoom(this.state.name);
+                    this.props.navigation.navigate('Menu');
+                    this.props.snackbarToggle();
                 }
             }
             else{
-                this.addRoom();
+                this.props.addRoom(this.state.name);
+                this.props.navigation.navigate('Menu');
+                this.props.snackbarToggle();
+
             }
         }
     }
 
-    toggleSnack = () => {
-        this.setState({
-            snackbar : !this.state.snackbar
-        })
+    toggleSnack = (text) => {
+        if(text == null){
+            this.setState({
+                snackbar : !this.state.snackbar
+            })
+        }
+        else{
+            this.setState({
+                snackbar : !this.state.snackbar,
+                snackBarText : text
+            })
+        }
     }
 
     render(){
@@ -145,7 +150,8 @@ class Login extends Component{
                             />
                         </Card.Content>
                         <Button mode="contained" style = {Styles.button} 
-                            onPress={() => this.confirmCreds()}
+                            onPress = {() => this.confirmCreds()}
+                            // onPress = {() => this.props.snackbarToggle(false)}
                             >
                             Join
                         </Button>
@@ -155,14 +161,9 @@ class Login extends Component{
                         onDismiss={() => this.toggleSnack()}
                         style = {{}}
                     >
-                        {
-                            this.state.wrongPass ? 
-                            'Wrong password' 
-                            : 
-                            'Input cant be empty'
-                        }
+                        {this.state.snackBarText}
                     </Snackbar>
-                </View>       
+                </View>
             </TouchableWithoutFeedback>
         );
     }
@@ -183,4 +184,4 @@ const Styles = StyleSheet.create({
         fontSize : 20
     }
 })
-export default connect(mapStateToProps, mapDispatchToProps)(Login);
+export default connect(mapStateToProps,mapDispatchToProps)(Login);
