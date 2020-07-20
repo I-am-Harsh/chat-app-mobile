@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
-import {Alert} from 'react-native';
+import { SafeAreaView} from 'react-native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { createStackNavigator } from '@react-navigation/stack';
-import AsyncStorage from '@react-native-community/async-storage';
 import { connect } from 'react-redux';
 import { AppBarHeader, ChatBarHeader } from './HeaderComponent'
 import Login from './LoginComponent';
@@ -63,7 +62,7 @@ class Main extends Component {
     MenuStackScreen = () => {
         return (
             <MenuStack.Navigator
-                initialRouteName='Chat Test'
+                // initialRouteName='Chat Test'
                 headerMode='screen'
                 screenOptions={{
                     header: ({ navigation }) => <AppBarHeader title='Chats' navigation={navigation}/>
@@ -133,7 +132,9 @@ class Main extends Component {
         const Drawer = () => {
             return (
                 <MainDrawer.Navigator
-                    initialRouteName="Menu"
+                    initialRouteName = "Menu"
+                    drawerStyle = {{backgroundColor : 'black'}}
+                    
                 >
                     <MainDrawer.Screen
                         name='Join a Room'
@@ -145,7 +146,6 @@ class Main extends Component {
                     />
                     <MainDrawer.Screen
                         name='Setting'
-
                         component={this.SettingStackScreen}
                     />
                 </MainDrawer.Navigator>

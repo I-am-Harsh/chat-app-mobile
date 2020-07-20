@@ -1,4 +1,4 @@
-import { createStore, combineReducers, applyMiddleware } from 'redux';
+import { createStore, applyMiddleware } from 'redux';
 import {persistCombineReducers, persistStore} from 'redux-persist';
 import AsyncStorage from '@react-native-community/async-storage';
 import thunk from 'redux-thunk';
@@ -19,7 +19,7 @@ export const ConfigureStore = () => {
             rooms : Rooms,
             snackbar : snackbar
         }),
-        applyMiddleware(thunk,logger)
+        applyMiddleware(thunk)
     );
     const persistor = persistStore(store);
     return { persistor, store };

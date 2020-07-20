@@ -68,6 +68,7 @@ class Menu extends Component {
                     }
                 }
             ]
+            var dark = true
             return(
                 
                 // <Swipeout right = { rightButton } autoClose key = {index}>
@@ -77,9 +78,9 @@ class Menu extends Component {
                         chevron
                         onPress = {() => {this.props.navigation.navigate(item)}}
                         // onPress = {() => this.props.addRoom('1')}
-                        titleStyle = {{fontSize : 20}}
+                        titleStyle = {{fontSize : 20, color : dark ? 'white' : 'black' }}
                         badge = {{value : 3}}
-                        containerStyle = {{padding : 30}}
+                        containerStyle = {{padding : 30, backgroundColor : ' black'}}
                     />
                 // </Swipeout>
             
@@ -90,14 +91,19 @@ class Menu extends Component {
             return(
                 // <ScrollView style = {Styles.main}>
                 <View style = {{flex : 1}}>
-                    <FlatList data = {this.props.rooms} renderItem = {renderChatItem} keyExtractor = {item => item}/>
+                    <FlatList 
+                        data = {this.props.rooms} 
+                        renderItem = {renderChatItem} 
+                        keyExtractor = {item => item}
+                        
+                    />
                     <Snackbar
                         visible = {this.props.snackbar}
                         onDismiss={() => this.props.snackbarToggle()}
                     >
                         Room Joined
                     </Snackbar>
-                    </View>
+                </View>
                     // </ScrollView>
             );
         }

@@ -1,21 +1,31 @@
 
-
-
 confirm alert for delete -- check once
 
 
+
+
 setting --
-    name change -- done
     recents option -- delete room after application close ?
-    dark mode?
+    dark mode -- make a radio
+
+
+ongoing -- confirm snackbar working 
+        -- snackbar color in custom theme 
+        -- style for appbar iphone 
+        -- find dark color palette 
+        -- safeareaview in chat 
 
 
 bug -- room persists after deleting
     -- popup menu is not clickable android -- works fine on IOS
+    -- keyboard doesnt get the stuff up in chat
+    -- safe area view issue iphone
+    
 
 
-to fix - virtualized/scroll view thing in room render
-add swipeout back in menu
+to fix -- 
+        -- virtualized/scroll view thing in room render
+        -- add swipeout back in menu
 
 
 
