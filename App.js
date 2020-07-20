@@ -52,13 +52,13 @@ export default function App() {
         persistor = {persistor}
         loading={null}
       >
-        <PaperProvider theme = {customTheme}>
+        {/* <PaperProvider> */}
         {/* <PaperProvider theme = {customTheme}> */}
-          <NavigationContainer theme = {newDark}>
+          <NavigationContainer>
           {/* <NavigationContainer theme = {newDark}> */}
             <Main/>
           </NavigationContainer>
-        </PaperProvider>
+        {/* </PaperProvider> */}
       </PersistGate>
     </Provider>
   );

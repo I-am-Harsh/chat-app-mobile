@@ -77,8 +77,7 @@ class Menu extends Component {
                         bottomDivider
                         chevron
                         onPress = {() => {this.props.navigation.navigate(item)}}
-                        // onPress = {() => this.props.addRoom('1')}
-                        titleStyle = {{fontSize : 20, color : dark ? 'white' : 'black' }}
+                        // titleStyle = {{fontSize : 20, color : dark ? 'white' : 'black' }}
                         badge = {{value : 3}}
                         containerStyle = {{padding : 30, backgroundColor : ' black'}}
                     />

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Button, Menu, Divider, Provider, Appbar } from 'react-native-paper';
 import { connect } from 'react-redux';
 import { useSelector, useDispatch } from 'react-redux'
+import { Dimensions, Platform } from 'react-native';
 
 
 const MORE_ICON = Platform.OS === 'ios' ? 'dots-horizontal' : 'dots-vertical';
@@ -45,23 +46,40 @@ export const AppBarHeader = (props) => {
     // close menu 
     const closeMenu = () => setVisible(false);
 
+    const style = {
+        title : {
+            ...Platform.select({
+                ios : {
+                    paddingLeft : Dimensions.get('window').width/5
+                }
+            })
+        }
+    }
+
     return(
         <Appbar.Header>
-            <Appbar.Action icon = 'menu' onPress = {() => props.navigation.toggleDrawer()} />
-            <Appbar.Content title = {title}/>
+            <Appbar.Action icon = 'menu' onPress = {() => props.navigation.toggleDrawer()}/>
+            <Appbar.Content title = {title} style = {style.title}/>
             <Provider>
                 <Menu
                     visible = {visible}
                     onDismiss = {closeMenu}
                     anchor = {
                         <Appbar.Action icon={MORE_ICON} onPress={() => openMenu()} style = {{alignSelf : 'flex-end'}} color = 'white' />
-                    }   
+                    }
+                    contentStyle = {{zIndex : 2}}
                 >
-                    <Menu.Item onPress={() => dispatch({type : 'deleteAllRooms'})} title="Delete All Rooms"/>
+                    <Menu.Item 
+                        onPress={() => dispatch({type : 'deleteAllRooms'})} 
+                        title="Delete All Rooms"
+
+                    />
                 </Menu>
             </Provider>
         </Appbar.Header>
     );
+
+    
 }
 
 export const ChatBarHeader = (props) => {
@@ -72,7 +90,6 @@ export const ChatBarHeader = (props) => {
     if(props.disableOption){
         disableOption = true
     }
-    
     return(
         <Appbar.Header>            
             <Appbar.BackAction onPress = {() => props.navigation.goBack()}/>

@@ -133,7 +133,7 @@ class Main extends Component {
             return (
                 <MainDrawer.Navigator
                     initialRouteName = "Menu"
-                    drawerStyle = {{backgroundColor : 'black'}}
+                    // drawerStyle = {{backgroundColor : 'black'}}
                     
                 >
                     <MainDrawer.Screen
