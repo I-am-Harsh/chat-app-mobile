@@ -1,17 +1,18 @@
 import React from 'react';
 import { DarkTheme, NavigationContainer } from '@react-navigation/native';
 import Main from './Components/MainComponent';
-import { Provider } from 'react-redux';
+import { Provider, connect } from 'react-redux';
 import { ConfigureStore } from './redux/configureStore';
 import { PersistGate } from 'redux-persist/es/integration/react';
 import { DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
+import { darkMode } from './redux/ActionCreators';
 
 
 const { persistor, store } = ConfigureStore();
 
 const customTheme = {
   ...DefaultTheme,
-  dark: false,
+  dark: true,
   roundness: 4,
   colors: {
     primary: '#034748',
@@ -43,7 +44,15 @@ const newDark = {
   }
 }
 
-console.log(DarkTheme);
+const mapStateToProps = state => {
+  return {
+    darkMode : state.darkMode
+  }
+}
+
+const mapDispatchToProps = (dispatch) => ({
+  darkMode : (mode) => dispatch(darkMode(mode))
+})
 
 export default function App() {
   return (
@@ -52,14 +61,14 @@ export default function App() {
         persistor = {persistor}
         loading={null}
       >
-        {/* <PaperProvider> */}
-        {/* <PaperProvider theme = {customTheme}> */}
+        <PaperProvider theme = {customTheme}>
           <NavigationContainer>
-          {/* <NavigationContainer theme = {newDark}> */}
             <Main/>
           </NavigationContainer>
-        {/* </PaperProvider> */}
+        </PaperProvider>
       </PersistGate>
     </Provider>
   );
 }
+
+// export default connect(mapDispatchToProps, mapStateToProps)(App);

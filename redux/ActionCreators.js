@@ -26,3 +26,16 @@ export const snackbarToggle = (current) => ({
         current : current
     }
 })
+
+export const addMessage = (roomName, name, message) => ({
+    type : ActionTypes.addMessage,
+    payload : {
+        username : name,
+        message : message,
+        roomName : roomName
+    }
+})
+
+export const darkMode = (mode) => ({
+    type : ActionTypes.darkMode
+})

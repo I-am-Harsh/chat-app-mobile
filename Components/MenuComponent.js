@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
 import { View, StyleSheet, Text, Alert } from "react-native";
 import { Button, Snackbar } from 'react-native-paper';
-import AsyncStorage from '@react-native-community/async-storage';
 import { ListItem } from 'react-native-elements';
 import Swipeout from 'react-native-swipeout';
-import { FlatList, ScrollView } from 'react-native-gesture-handler';
+import { FlatList } from 'react-native-gesture-handler';
 import { connect } from 'react-redux';
-import { addRoom, deleteAllRooms, deleteSingleRoom, snackbarToggle } from '../redux/ActionCreators';
+import { deleteSingleRoom, snackbarToggle } from '../redux/ActionCreators';
 
 
 const mapStateToProps = state => {
@@ -17,9 +16,6 @@ const mapStateToProps = state => {
 }
 
 const mapDispatchToProps = (dispatch) => ({
-    addRoom : (name) => dispatch(addRoom(name)),
-    deleteAllRooms : () => dispatch(deleteAllRooms()),
-    // fix this variable send 
     deleteSingleRoom : (index) => dispatch(deleteSingleRoom(index)),
     snackbarToggle : (current) => dispatch(snackbarToggle(current))
 })
@@ -32,14 +28,6 @@ class Menu extends Component {
             visible : false
         }
     }
-
-    async componentDidMount(){
-        // test redux
-        // console.log('Redux rooms : ',this.props.rooms)
-        console.log('Snackbar update : ', this.props.snackbar)
-    }
-
-    
 
     render(){
         const renderChatItem = ({item, index}) => {
@@ -68,7 +56,7 @@ class Menu extends Component {
                     }
                 }
             ]
-            var dark = true
+            var dark = false
             return(
                 
                 // <Swipeout right = { rightButton } autoClose key = {index}>
@@ -77,9 +65,9 @@ class Menu extends Component {
                         bottomDivider
                         chevron
                         onPress = {() => {this.props.navigation.navigate(item)}}
-                        // titleStyle = {{fontSize : 20, color : dark ? 'white' : 'black' }}
+                        titleStyle = {{fontSize : 20, color : dark ? 'white' : 'black' }}
                         badge = {{value : 3}}
-                        containerStyle = {{padding : 30, backgroundColor : ' black'}}
+                        containerStyle = {{padding : 30}}
                     />
                 // </Swipeout>
             

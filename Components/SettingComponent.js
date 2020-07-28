@@ -4,10 +4,44 @@ import { ListItem } from 'react-native-elements';
 import { TextInput, Button } from 'react-native-paper';
 import AsyncStorage from '@react-native-community/async-storage';
 import chalk from 'chalk';
+import { darkMode } from '../redux/ActionCreators';
+import { connect } from 'react-redux';
 
+
+const mapStateToProps = state => {
+    return {
+      dark : state.darkMode
+    }
+}
+  
+const mapDispatchToProps = (dispatch) => ({
+    darkMode : (mode) => dispatch(darkMode(mode))
+})
 
 const ctx = new chalk.Instance({ level: 3 });
 const log = (text) => console.log(ctx.cyanBright(text));
+
+class ChangeUI extends Component {
+    constructor(props){
+        super(props);
+    }
+
+    componentDidMount(){
+        console.log('Dark : ', this.props.dark);
+    }
+
+    render(){
+        return(
+            <View>
+                <Button onPress = {() => {this.props.darkMode(true)}}>
+                    Dark Mode
+                </Button>
+            </View>
+        );
+    }
+}
+
+export const changeUI = connect(mapStateToProps, mapDispatchToProps)(ChangeUI);
 
 export class ChangeName extends Component {
 
@@ -21,7 +55,6 @@ export class ChangeName extends Component {
 
     changeName = () => {
         Keyboard.dismiss();
-        log(this.state.name);
         AsyncStorage.setItem('name', this.state.name);
     }
 
@@ -46,7 +79,7 @@ export class ChangeName extends Component {
                 <View style={Styles.main}>
                     <Text style={Styles.padding}>
                         This name will appear when you will chat.
-                </Text>
+                    </Text>
                     <TextInput
                         label='Screen Name'
                         mode='outlined'
@@ -59,7 +92,7 @@ export class ChangeName extends Component {
                         onPress={() => this.changeName()}
                     >
                         Change
-                </Button>
+                    </Button>
                 </View>
             </TouchableWithoutFeedback>
         );
@@ -69,17 +102,6 @@ export class ChangeName extends Component {
 
 
 class Setting extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-
-        }
-    }
-
-    test = (item) => {
-        console.log(item.title)
-        this.props.navigation.navigate(item.title);
-    }
 
     list = [
         {
@@ -87,7 +109,7 @@ class Setting extends Component {
             icon: 'contacts'
         },
         {
-            title: 'Trips',
+            title: 'UI',
             icon: 'flight-takeoff'
         },
 
@@ -123,4 +145,5 @@ const Styles = StyleSheet.create({
         marginBottom: 10
     }
 })
+// export default connect(mapDispatchToProps, mapStateToProps)(Setting);
 export default Setting;

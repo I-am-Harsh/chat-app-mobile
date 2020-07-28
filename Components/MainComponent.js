@@ -5,7 +5,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { connect } from 'react-redux';
 import { AppBarHeader, ChatBarHeader } from './HeaderComponent'
 import Login from './LoginComponent';
-import Setting, { ChangeName } from './SettingComponent';
+import Setting, { ChangeName, changeUI } from './SettingComponent';
 import Menu from './MenuComponent';
 import Chat from './ChatComponent';
 import chalk from 'chalk';
@@ -48,6 +48,15 @@ class Main extends Component {
                     options={
                         ({ navigation }) => ({
                             header: () => <ChatBarHeader title='Change Name' navigation={navigation} disableOption={true} />
+                        })
+                    }
+                />
+                <SettingStack.Screen
+                    name='UI'
+                    component={changeUI}
+                    options={
+                        ({ navigation }) => ({
+                            header: () => <ChatBarHeader title='UI' navigation={navigation} disableOption={true} />
                         })
                     }
                 />

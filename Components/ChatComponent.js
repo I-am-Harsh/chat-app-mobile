@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, TouchableWithoutFeedback, Keyboard, Platform, TextInput, SafeAreaView } from 'react-native';
-import AsyncStorage from '@react-native-community/async-storage';
-import { IconButton } from 'react-native-paper';
+import { View, Text, StyleSheet, Platform, TextInput, SafeAreaView, KeyboardAvoidingView } from 'react-native';
+import {Header} from '@react-navigation/stack'
+import { IconButton, Appbar } from 'react-native-paper';
 import chalk from 'chalk';
 import { ScrollView } from 'react-native-gesture-handler';
 
@@ -21,29 +21,17 @@ class Chat extends Component {
         }
     }
 
-    getData = async () => {
-        try {
-            const value = await AsyncStorage.getItem('name')
-            if (value !== null) {
-                this.setState({
-                    name: value
-                })
-            }
-        } catch (e) {
-            log('Error');
-        }
-    }
-
-    componentDidMount = async () => {
-        this.getData();
-    }
-
     render() {
         return (
-            <SafeAreaView style={Styles.main}>
+            <KeyboardAvoidingView 
+                keyboardVerticalOffset = { 0 } 
+                style = {{ flex: 1 }}
+                behavior={Platform.OS === "ios" ? "padding" : null}
+            >
+            {/* <SafeAreaView style={Styles.main}> */}
                 <ScrollView
                     ref={ref => {this.scrollView = ref}}
-                    onContentSizeChange={() => this.scrollView.scrollToEnd({animated: true})}
+                    onContentSizeChange={() => this.scrollView.scrollToEnd()}
                     contentContainerStyle = {{paddingBottom : 55}}
                 >
                     {
@@ -82,10 +70,13 @@ class Chat extends Component {
                         onContentSizeChange={(event) => this.setState({ height: event.nativeEvent.contentSize.height })}
                         numberOfLines={4}
                     />
-                    <IconButton icon = 'send' onPress = {() => {}} style = {Styles.button}></IconButton>
-                    {/* <Button>Send</Button> */}
+                    <IconButton icon = 'send' 
+                        onPress = {() => {}} 
+                        style = {Styles.button}
+                    />
                 </View>
-            </SafeAreaView>
+            {/* </SafeAreaView> */}
+            </KeyboardAvoidingView>
         );
     }
 
