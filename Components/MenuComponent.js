@@ -11,7 +11,8 @@ import { deleteSingleRoom, snackbarToggle } from '../redux/ActionCreators';
 const mapStateToProps = state => {
     return {
       rooms : state.rooms,
-      snackbar : state.snackbar
+      snackbar : state.snackbar,
+      darkMode : state.darkMode
     }
 }
 
@@ -56,7 +57,7 @@ class Menu extends Component {
                     }
                 }
             ]
-            var dark = false
+            var dark = this.props.darkMode
             return(
                 
                 // <Swipeout right = { rightButton } autoClose key = {index}>
@@ -67,7 +68,7 @@ class Menu extends Component {
                         onPress = {() => {this.props.navigation.navigate(item)}}
                         titleStyle = {{fontSize : 20, color : dark ? 'white' : 'black' }}
                         badge = {{value : 3}}
-                        containerStyle = {{padding : 30}}
+                        containerStyle = {{padding : 30, backgroundColor : dark ? '#121212' : 'white'}}
                     />
                 // </Swipeout>
             

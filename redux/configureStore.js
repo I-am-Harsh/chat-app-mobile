@@ -6,6 +6,7 @@ import logger from 'redux-logger';
 import { Rooms } from './Rooms';
 import { snackbar } from './Snackbar';
 import { darkMode } from './darkMode';
+import { RoomChat } from './RoomChat';
 
 
 const config = {
@@ -21,7 +22,7 @@ export const ConfigureStore = () => {
             snackbar : snackbar,
             darkMode : darkMode
         }),
-        applyMiddleware(thunk, logger)
+        applyMiddleware(thunk)
     );
     const persistor = persistStore(store);
     return { persistor, store };

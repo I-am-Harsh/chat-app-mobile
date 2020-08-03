@@ -4,20 +4,27 @@ var rooms = [];
 export const Rooms = (state = rooms, action) => {
     switch(action.type){
         case ActionTypes.addRoom:
-            var roomName = action.payload.name;
-            var newRooms = [...state];
+            let roomName = action.payload.name;
+            let newRooms = [...state];
             newRooms.unshift(roomName);
             return newRooms;
         
         case ActionTypes.deleteAllRooms:
-            newRooms = []
+            newRooms = [];
             return newRooms;
 
         case ActionTypes.deleteSingleRoom:
-            var deletedRoom = action.payload.name
-            var newRooms = [...state];
+            let deletedRoom = action.payload.name;
+            let newRooms = [...state];
             newRooms.splice(deletedRoom,1)
             return newRooms
+        
+        case ActionTypes.addMessage :
+            let message = action.paylod.message;
+            let roomName = action.payload.roomName
+            let userName = action.payload.username
+
+            
         default : 
             return state
     }

@@ -4,7 +4,7 @@ import * as ActionTypes from './ActionTypes';
 export const addRoom = (name) => ({
     type : ActionTypes.addRoom,
     payload : {
-        name : name
+        name
     }
 });
 
@@ -16,23 +16,23 @@ export const deleteAllRooms = () => ({
 export const deleteSingleRoom = (index) => ({
     type : ActionTypes.deleteSingleRoom,
     payload : {
-        index : index
+        index
     }
 })
 
 export const snackbarToggle = (current) => ({
     type : ActionTypes.snackbar,
     payload : {
-        current : current
+        current
     }
 })
 
-export const addMessage = (roomName, name, message) => ({
+export const addMessageToRoom = (roomName, name, message) => ({
     type : ActionTypes.addMessage,
     payload : {
         username : name,
-        message : message,
-        roomName : roomName
+        message,
+        roomName
     }
 })
 

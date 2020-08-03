@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
-import { SafeAreaView} from 'react-native';
+import { StatusBar, StyleSheet } from 'react-native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { createStackNavigator } from '@react-navigation/stack';
+import { DarkTheme as DarkNav, DefaultTheme as DefaultNav, NavigationContainer } from '@react-navigation/native';
+import { DefaultTheme as DefaultPaper, Provider as PaperProvider, DarkTheme as DarkPaper } from 'react-native-paper';
 import { connect } from 'react-redux';
 import { AppBarHeader, ChatBarHeader } from './HeaderComponent'
 import Login from './LoginComponent';
-import Setting, { ChangeName, changeUI } from './SettingComponent';
+import Setting, { ChangeName } from './SettingComponent';
 import Menu from './MenuComponent';
 import Chat from './ChatComponent';
 import chalk from 'chalk';
@@ -14,7 +16,8 @@ const ctx = new chalk.Instance({ level: 3 });
 
 const mapStateToProps = state => {
     return {
-      rooms : state.rooms
+      rooms : state.rooms,
+      darkMode : state.darkMode
     }
 }
 
@@ -51,16 +54,6 @@ class Main extends Component {
                         })
                     }
                 />
-                <SettingStack.Screen
-                    name='UI'
-                    component={changeUI}
-                    options={
-                        ({ navigation }) => ({
-                            header: () => <ChatBarHeader title='UI' navigation={navigation} disableOption={true} />
-                        })
-                    }
-                />
-
             </SettingStack.Navigator>
         );
     }
@@ -135,15 +128,24 @@ class Main extends Component {
         )
     }
 
+    componentDidMount(){
+        console.log(ctx.red(this.props.darkMode));
+    }
+
     render() {
 
         const MainDrawer = createDrawerNavigator();
         const Drawer = () => {
+            var route;
+            if(this.props.rooms.length >= 1){
+                route = 'Menu'
+            }
+            else{
+                route = 'Join a Room'
+            }
             return (
                 <MainDrawer.Navigator
-                    initialRouteName = "Menu"
-                    // drawerStyle = {{backgroundColor : 'black'}}
-                    
+                    initialRouteName = { route }
                 >
                     <MainDrawer.Screen
                         name='Join a Room'
@@ -162,11 +164,35 @@ class Main extends Component {
         }
 
         return (
-            <Drawer />
+            <PaperProvider theme = {this.props.darkMode ? DarkPaper : DefaultPaper}>
+                <NavigationContainer theme = {this.props.darkMode ? MyTheme : DefaultNav}>
+                    <StatusBar 
+                        translucent 
+                        backgroundColor = {this.props.darkMode ? '#121212' : '#6200ee'}
+                        barStyle = {this.props.darkMode ? 'light-content' : 'dark-content'}
+                    />
+                    <Drawer />
+                </NavigationContainer>
+            </PaperProvider>
         );
     }
-
 }
+  
+const Dark = {
+    ...DarkPaper,
+    colors : {
+        background : '#121212'
+    }
+};
+
+const MyTheme = {
+    ...DarkNav,
+    colors: {
+      ...DarkNav.colors,
+      primary: 'red',
+      background : '#121212'
+    },
+  };
 
 
 export default connect(mapStateToProps)(Main);

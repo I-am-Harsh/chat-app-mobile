@@ -1,7 +1,7 @@
 import React, { Component, useState } from 'react';
 import { View, Text, StyleSheet, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import { ListItem } from 'react-native-elements';
-import { TextInput, Button } from 'react-native-paper';
+import { TextInput, Button, Switch, List } from 'react-native-paper';
 import AsyncStorage from '@react-native-community/async-storage';
 import chalk from 'chalk';
 import { darkMode } from '../redux/ActionCreators';
@@ -20,28 +20,6 @@ const mapDispatchToProps = (dispatch) => ({
 
 const ctx = new chalk.Instance({ level: 3 });
 const log = (text) => console.log(ctx.cyanBright(text));
-
-class ChangeUI extends Component {
-    constructor(props){
-        super(props);
-    }
-
-    componentDidMount(){
-        console.log('Dark : ', this.props.dark);
-    }
-
-    render(){
-        return(
-            <View>
-                <Button onPress = {() => {this.props.darkMode(true)}}>
-                    Dark Mode
-                </Button>
-            </View>
-        );
-    }
-}
-
-export const changeUI = connect(mapStateToProps, mapDispatchToProps)(ChangeUI);
 
 export class ChangeName extends Component {
 
@@ -103,21 +81,20 @@ export class ChangeName extends Component {
 
 class Setting extends Component {
 
-    list = [
-        {
-            title: 'Change Name',
-            icon: 'contacts'
-        },
-        {
-            title: 'UI',
-            icon: 'flight-takeoff'
-        },
+    // list = [
+    //     {
+    //         title: 'Change Name',
+    //         icon: 'contacts'
+    //     }
+    // ]
 
-    ]
+    componentDidMount(){
+        console.log(ctx.blueBright(this.props.dark));
+    }
     render() {
         return (
             <View>
-                {
+                {/* {
                     this.list.map((item, i) => (
                         <ListItem
                             key={i}
@@ -128,7 +105,25 @@ class Setting extends Component {
                             onPress={() => this.props.navigation.navigate(item.title)}
                         />
                     ))
-                }
+                } */}
+                <List.Item
+                    title="Change Name"
+                    description="Edit your display name while chatting"
+                    left={props => <List.Icon {...props} icon="rename-box"/>}
+                    onPress = {() => this.props.navigation.navigate('Change Name')}
+                />
+                <List.Item
+                    title = 'Dark Mode'
+                    description = 'Change the theme of the app'
+                    right = { 
+                        () => 
+                            <Switch value = {this.props.dark} 
+                                onValueChange = {() => this.props.darkMode(true)} 
+                                color = 'red'
+                            />
+                    }
+                    left = {(props) => <List.Icon {...props} icon = {this.props.dark ? 'brightness-3' : 'brightness-7'}/>}
+                />
             </View>
         )
     }
@@ -145,5 +140,5 @@ const Styles = StyleSheet.create({
         marginBottom: 10
     }
 })
-// export default connect(mapDispatchToProps, mapStateToProps)(Setting);
-export default Setting;
+export default connect(mapStateToProps, mapDispatchToProps)(Setting);
+// export default Setting;
