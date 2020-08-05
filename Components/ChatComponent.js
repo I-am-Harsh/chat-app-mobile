@@ -6,7 +6,6 @@ import chalk from 'chalk';
 import { ScrollView } from 'react-native-gesture-handler';
 
 const ctx = new chalk.Instance({ level: 3 });
-const log = (text) => console.log(ctx.cyanBright(text));
 
 class Chat extends Component {
     constructor(props) {

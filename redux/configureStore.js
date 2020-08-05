@@ -6,7 +6,6 @@ import logger from 'redux-logger';
 import { Rooms } from './Rooms';
 import { snackbar } from './Snackbar';
 import { darkMode } from './darkMode';
-import { RoomChat } from './RoomChat';
 
 
 const config = {

@@ -2,11 +2,11 @@ import React, {Component} from 'react';
 import {View, Text, StyleSheet, ToastAndroid, Platform, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import { Card, TextInput, Button, Snackbar } from 'react-native-paper';
 import { connect } from 'react-redux';
-import { addRoom, snackbarToggle } from '../redux/ActionCreators';
+import { addRoom, snackbarToggle, deleteAllRooms } from '../redux/ActionCreators';
 import chalk from 'chalk';
 
 const ctx = new chalk.Instance({level : 3});
-const log = (text) => console.log(ctx.cyanBright(text));
+
 
 const mapStateToProps = state => {
     return {
@@ -16,7 +16,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = (dispatch) => ({
     addRoom : (name) => dispatch(addRoom(name)),
-    snackbarToggle : () => dispatch(snackbarToggle())
+    snackbarToggle : () => dispatch(snackbarToggle()),
+    deleteAllRooms : () => dispatch(deleteAllRooms())
 })
 
 class Login extends Component{
@@ -57,6 +58,23 @@ class Login extends Component{
 
         return false;
     }
+
+    isEmpty(obj) {
+        for(var i in obj) return false; 
+        return true;
+    }
+    
+
+    checkIfRoomJoined = () => {
+        console.log('rooms : ', this.props.rooms);
+        let result = Object.keys(this.props.rooms).some((current)  => current === this.state.name)
+        console.log(result);
+        return result
+    }
+
+    // componentDidMount(){
+    //     this.checkIfRoomJoined()
+    // }
     
     confirmCreds = () => {
         // API call
@@ -66,21 +84,25 @@ class Login extends Component{
             // if empty
             // show message 
             this.toggleSnack('Please fill the red fields.');
-            log('empty true');
         }
         else{
-            if(this.props.rooms.length !== 0){
-                if(this.props.rooms.includes(this.state.name)){
+            if(!this.isEmpty(this.props.rooms)){
+                console.log('gg');
+                if(this.checkIfRoomJoined()){
+                    console.log('room already joined ')
                     this.toggleSnack('Room already joined');
                     this.reset()
                 }
                 else{
+                    console.log('lmao');
+                    this.reset();
                     this.props.addRoom(this.state.name);
                     this.props.navigation.navigate('Menu');
                     this.props.snackbarToggle();
                 }
             }
             else{
+                console.log('rip');
                 this.props.addRoom(this.state.name);
                 this.props.navigation.navigate('Menu');
                 this.props.snackbarToggle();
@@ -102,6 +124,7 @@ class Login extends Component{
         }
     }
 
+    
     render(){
         
         return(

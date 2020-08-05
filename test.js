@@ -19,15 +19,34 @@ let rooms = {
             message : 'lmaqweo'
         }
     ],
-    [roomNameInput] : []
+    lol : [],
+    asd : []
 }
 
-rooms[roomNameInput].push({
-    userName,
-    message
-})
 
-// rooms[roomNameInput].map(item => console.log(item))
-// console.log(rooms);
-const vals = Object.keys(rooms).map(key => key);
-console.log(vals);
+// rooms[roomNameInput].push({
+//     userName,
+//     message
+// })
+
+
+function A(obj) {
+    for(var i in obj) return false; 
+    return true;
+  }
+
+// if(A(rooms)){
+//     console.log('empty');
+
+// }
+// else{
+//     console.log('not empty');
+// }
+
+
+const checkIfRoomJoined = () => {
+    let result = Object.keys(rooms).some((current)  => current === 'l213ol')
+    return result
+}
+
+console.log(checkIfRoomJoined());

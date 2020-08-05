@@ -76,7 +76,7 @@ class Main extends Component {
                     component={Menu}
                 />
 
-                {
+                {/* {
                     this.props.rooms.length !== 0 &&
                     this.props.rooms.map((item, index) => {
                         return (
@@ -93,6 +93,24 @@ class Main extends Component {
                                 }
                             />
                         )
+                    })
+                } */}
+                {
+                    Object.keys(this.props.rooms).map(key => {
+                        return(
+                            <MenuStack.Screen
+                                name={key.toString()}
+                                key={key}
+                                component={Chat}
+                                options={
+                                    () => ({
+                                        header: ({ navigation }) => (
+                                            <ChatBarHeader navigation={navigation} title={key} />
+                                        )
+                                    })
+                                }
+                            />
+                        );
                     })
                 }
                 <MenuStack.Screen
@@ -128,9 +146,6 @@ class Main extends Component {
         )
     }
 
-    componentDidMount(){
-        console.log(ctx.red(this.props.darkMode));
-    }
 
     render() {
 

@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
-import { View, StyleSheet, Text, Alert } from "react-native";
+import { View, StyleSheet, Text, Alert, Platform } from "react-native";
 import { Button, Snackbar } from 'react-native-paper';
 import { ListItem } from 'react-native-elements';
 import Swipeout from 'react-native-swipeout';
 import { FlatList } from 'react-native-gesture-handler';
-import { connect } from 'react-redux';
+import { connect, useSelector } from 'react-redux';
 import { deleteSingleRoom, snackbarToggle } from '../redux/ActionCreators';
+import { color } from 'react-native-reanimated';
 
 
 const mapStateToProps = state => {
@@ -20,7 +21,7 @@ const mapDispatchToProps = (dispatch) => ({
     deleteSingleRoom : (index) => dispatch(deleteSingleRoom(index)),
     snackbarToggle : (current) => dispatch(snackbarToggle(current))
 })
-
+// const dark = useSelector(state => state.darkMode);
 class Menu extends Component {
     constructor(props){
         super(props);
@@ -31,6 +32,7 @@ class Menu extends Component {
     }
 
     render(){
+        const dark = this.props.darkMode;
         const renderChatItem = ({item, index}) => {
             const rightButton = [
                 {
@@ -57,7 +59,6 @@ class Menu extends Component {
                     }
                 }
             ]
-            var dark = this.props.darkMode
             return(
                 
                 // <Swipeout right = { rightButton } autoClose key = {index}>
@@ -75,12 +76,12 @@ class Menu extends Component {
             )
         }
 
-        if(this.props.rooms.length > 0){
+        if(Object.keys(this.props.rooms).length > 0){
             return(
                 // <ScrollView style = {Styles.main}>
                 <View style = {{flex : 1}}>
                     <FlatList 
-                        data = {this.props.rooms} 
+                        data = {Object.keys(this.props.rooms)} 
                         renderItem = {renderChatItem} 
                         keyExtractor = {item => item}
                         
@@ -98,7 +99,7 @@ class Menu extends Component {
         else{
             return(
                 <View style = {{flex : 1}}>
-                    <Text style = {Styles.emptyText}>
+                    <Text style = {[Styles.emptyText, {color : this.props.darkMode ? 'white' : 'black'}]}>
                         Please add some rooms
                     </Text>
                     <Button style ={Styles.button} mode='contained' onPress = {() => this.props.navigation.navigate('Join a Room')} >
@@ -122,7 +123,8 @@ const Styles = StyleSheet.create({
         fontSize : 30,
         fontWeight : 'bold',
         margin : 20,
-        textAlign : "center"
+        textAlign : "center",
+        // color : dark ? 'black' : 'white'
     },
     button : {
         flexDirection : "row", 

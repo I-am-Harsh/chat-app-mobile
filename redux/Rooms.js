@@ -1,29 +1,30 @@
 import * as ActionTypes from './ActionTypes';
+import logger from 'redux-logger';
 
-var rooms = [];
+const rooms = {}
 export const Rooms = (state = rooms, action) => {
+    
     switch(action.type){
         case ActionTypes.addRoom:
             let roomName = action.payload.name;
-            let newRooms = [...state];
-            newRooms.unshift(roomName);
-            return newRooms;
-        
+            var newState = {...state};
+            newState[roomName] = [];
+            return newState
+            
         case ActionTypes.deleteAllRooms:
-            newRooms = [];
-            return newRooms;
+            var newstate = {};
+            return newstate;
 
         case ActionTypes.deleteSingleRoom:
             let deletedRoom = action.payload.name;
-            let newRooms = [...state];
-            newRooms.splice(deletedRoom,1)
-            return newRooms
+            var newState = {...state};
+            delete newState[deletedRoom]
+            return newState
         
-        case ActionTypes.addMessage :
-            let message = action.paylod.message;
-            let roomName = action.payload.roomName
-            let userName = action.payload.username
-
+        // case ActionTypes.addMessage :
+        //     let message = action.paylod.message;
+        //     let roomName = action.payload.roomName
+        //     let userName = action.payload.username
             
         default : 
             return state

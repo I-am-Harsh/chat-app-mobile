@@ -19,7 +19,6 @@ const mapDispatchToProps = (dispatch) => ({
 })
 
 const ctx = new chalk.Instance({ level: 3 });
-const log = (text) => console.log(ctx.cyanBright(text));
 
 export class ChangeName extends Component {
 
@@ -41,9 +40,7 @@ export class ChangeName extends Component {
         try {
             const value = await AsyncStorage.getItem('name')
             if (value !== null) {
-                console.log(ctx.green('getData'))
                 this.setState({name : value});
-                console.log(ctx.blackBright(this.state.name))
             }
         }
         catch (e) {
@@ -80,17 +77,6 @@ export class ChangeName extends Component {
 
 
 class Setting extends Component {
-
-    // list = [
-    //     {
-    //         title: 'Change Name',
-    //         icon: 'contacts'
-    //     }
-    // ]
-
-    componentDidMount(){
-        console.log(ctx.blueBright(this.props.dark));
-    }
     render() {
         return (
             <View>
