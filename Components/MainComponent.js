@@ -5,11 +5,15 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { DarkTheme as DarkNav, DefaultTheme as DefaultNav, NavigationContainer } from '@react-navigation/native';
 import { DefaultTheme as DefaultPaper, Provider as PaperProvider, DarkTheme as DarkPaper } from 'react-native-paper';
 import { connect } from 'react-redux';
+
+
 import { AppBarHeader, ChatBarHeader } from './HeaderComponent'
 import Login from './LoginComponent';
 import Setting, { ChangeName } from './SettingComponent';
 import Menu from './MenuComponent';
 import Chat from './ChatComponent';
+import ChatTest from './ChatTest';
+
 import chalk from 'chalk';
 
 const ctx = new chalk.Instance({ level: 3 });
@@ -25,6 +29,7 @@ const mapStateToProps = state => {
 const HomeStack = createStackNavigator();
 const SettingStack = createStackNavigator();
 const MenuStack = createStackNavigator();
+const ChatTestStack = createStackNavigator();
 
 class Main extends Component {
     constructor(props) {
@@ -64,7 +69,7 @@ class Main extends Component {
     MenuStackScreen = () => {
         return (
             <MenuStack.Navigator
-                // initialRouteName='Chat Test'
+                initialRouteName='Chat Test'
                 headerMode='screen'
                 screenOptions={{
                     header: ({ navigation }) => <AppBarHeader title='Chats' navigation={navigation}/>
@@ -146,6 +151,22 @@ class Main extends Component {
         )
     }
 
+    ChatTest = () => {
+        return (
+            <ChatTestStack.Navigator
+                headerMode='screen'
+                screenOptions={{
+                    header: ({ navigation }) => <ChatBarHeader navigation={navigation} title={'Chat Test'} />
+                }}
+            >
+                <ChatTestStack.Screen
+                    name='Chat Test'
+                    component={ChatTest}
+                />
+            </ChatTestStack.Navigator>
+        )
+    }
+
 
     render() {
 
@@ -160,7 +181,7 @@ class Main extends Component {
             }
             return (
                 <MainDrawer.Navigator
-                    initialRouteName = { route }
+                    initialRouteName = {route}
                 >
                     <MainDrawer.Screen
                         name='Join a Room'
@@ -174,6 +195,10 @@ class Main extends Component {
                         name='Setting'
                         component={this.SettingStackScreen}
                     />
+                    {/* <MainDrawer.Screen
+                        name='Chat Test'
+                        component={this.ChatTest}
+                    /> */}
                 </MainDrawer.Navigator>
             );
         }

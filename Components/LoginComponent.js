@@ -33,6 +33,7 @@ class Login extends Component{
             wrongPass : false,
             snackBarText : ''
         }
+        this.passwordRef = React.createRef()
     }
 
     reset = () => {
@@ -141,9 +142,12 @@ class Login extends Component{
                                 value = {this.state.name}
                                 onChange = {(text) => this.setState({name : text.nativeEvent.text, errorRoomName : false})}
                                 error = {this.state.errorRoomName}
-                                
+                                onSubmitEditing = {() => this.passwordRef.current.focus()}
+                                blurOnSubmit={false}
+                                returnKeyType = 'next'
                             />
                             <TextInput
+                                ref = {this.passwordRef}
                                 label="Password"
                                 mode = 'outlined'
                                 secureTextEntry
@@ -152,6 +156,7 @@ class Login extends Component{
                                 onChange = {(text) => this.setState({password : text.nativeEvent.text, errorPass : false})}
                                 error = {this.state.errorPass}
                                 onFocus = {() => this.setState({password : ''})}
+                                returnKeyType = "go"
                             />
                         </Card.Content>
                         <Button mode="contained" style = {Styles.button} 
