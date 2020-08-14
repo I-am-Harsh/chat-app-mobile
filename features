@@ -28,6 +28,15 @@ to fix --
 
 
 
+to accomplish --> 
+scroll to bottom when the chat is at bottom 
+scroll back to bottom after the keyboard has closed
+
+dont scroll when the scrollview is not at bottom
+
+
+
+
 
 
     

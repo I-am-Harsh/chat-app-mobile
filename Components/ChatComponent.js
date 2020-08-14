@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, Platform, TextInput, SafeAreaView, KeyboardAvoidingView } from 'react-native';
+import { View, Text, StyleSheet, Platform, TextInput, SafeAreaView, KeyboardAvoidingView, Keyboard } from 'react-native';
 import { IconButton } from 'react-native-paper';
 import { ScrollView } from 'react-native-gesture-handler';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { connect } from 'react-redux'
 import chalk from 'chalk';
 
@@ -26,12 +25,38 @@ class Chat extends Component {
             temp: [1, 2, 3, 4, 5, 6]
         }
         this.scrollView = React.createRef();
-        
+    }
+
+    scrollToEndonKeyboardOpen = (e) => {        
+        this.scrollView.current.scrollTo(
+            {
+                y : e.endCoordinates.screenY + 100, 
+                animated : true
+            }
+        )
+    }
+
+    sendChat = () => {
+        console.log('presesd');
+        let newTemp = [...this.state.temp]
+        newTemp.push(newTemp.length + 1)
+        this.setState({
+            temp : newTemp
+        })
+    }
+
+    componentDidMount(){
+        this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', this.scrollToEndonKeyboardOpen);
+        this.keyboardDidHide = Keyboard.addListener('keyboardDidHide', this.scrollView.current.scrollToEnd());
+    }
+
+    componentWillUnmount() {
+        this.keyboardDidShowListener.remove();
+        this.keyboardDidHide.remove();
     }
 
     render() {
         const dark = this.props.darkMode
-        const scrollToEnd = React.createRef();
         return (
             <KeyboardAvoidingView 
                 keyboardVerticalOffset = { 0 } 
@@ -41,9 +66,8 @@ class Chat extends Component {
                 <SafeAreaView style={Styles.main}>
                     <ScrollView
                         ref = {this.scrollView} 
-                        onContentSizeChange={() => this.scrollView.current.scrollToEnd({animated: false})}
+                        onContentSizeChange={() => this.scrollView.current.scrollToEnd()}
                         contentContainerStyle = {Styles.scrollviewContent}
-                        // snapToEnd
                     >
                         {
                             this.state.temp.map(index => {
@@ -55,7 +79,7 @@ class Chat extends Component {
                                             </Text>
                                             <View style={Styles.messageBox} >
                                                 <Text>
-                                                    me
+                                                    test message 
                                                 </Text>
                                             </View>
                                         </View>
@@ -78,7 +102,7 @@ class Chat extends Component {
                     <View style={Styles.chatInputArea}>
                         <TextInput
                             placeholder='Send a message'
-                            style={[Styles.input, { height: Math.min(100, this.state.height) }]}
+                            style={[Styles.input, { height: Math.min(80, this.state.height) }]}
                             value={this.state.text}
                             onChange={(text) => this.setState({ text: text.nativeEvent.text })}
                             placeholderTextColor='black'
@@ -88,7 +112,8 @@ class Chat extends Component {
                             onFocus = {() => this.scrollView.current.scrollToEnd({animated: true})}
                         />
                         <IconButton icon = 'send' 
-                            onPress = {() => this.scrollView.current.scrollToEnd({animated: false})} 
+                            // onPress = {() => this.scrollView.current.scrollToEnd({animated: false})} 
+                            onPress = { () => this.sendChat()}
                             style = {Styles.button}
                             color = 'black'
                         />
@@ -120,22 +145,12 @@ const Styles = StyleSheet.create({
             android : {
                 paddingBottom : 10
             }
-        }),
-        justifyContent : 'flex-end'
+        })
     },
     chatInputArea: {
         flexDirection: "row",
-        ...Platform.select({
-            android: {
-                bottom : 0
-            },
-            ios: {
-                bottom : 20
-            }
-        }),
         backgroundColor : 'powderblue',
         borderRadius : 30,
-
     },
     input: {
         flex : 3,
@@ -149,7 +164,6 @@ const Styles = StyleSheet.create({
     },
     button: {
         flex : 1,
-        alignSelf: 'center',
         marginRight: 5,
         borderRadius : 30,  
     },
